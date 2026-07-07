@@ -11,10 +11,10 @@
   --rust: #b5651d;
   --amber: #d8a657;
   --cream: #f4ecd6;
-  --bark: #26211c;
+  --bark: #2f2923;
   --cream-2: #eae0c4;
   --cream-3: #ded2b0;
-  --bark-2: #332c25;
+  --bark-2: #3a312a;
   --amber-deep: #a9761f;
   --rust-deep: #8f4e16;
 
@@ -33,7 +33,7 @@
   --color-button-text: var(--cream);
   --color-surface: var(--bark-2);
   --color-surface-alt: var(--forest-green);
-  --color-surface-hover: #3c342c;
+  --color-surface-hover: #453b32;
   --font-main: 'Segoe UI', system-ui, sans-serif;
   --radius: 10px;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
@@ -151,18 +151,56 @@ a:hover {
    ============================================================ */
 .hero {
   min-height: 80vh;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   padding: 4rem 2rem;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(216, 166, 87, 0.14), transparent 20%),
-    linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-alt) 100%);
+  position: relative;
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    rgba(38, 33, 28, 0.58),
+    rgba(38, 33, 28, 0.42)
+  );
+}
+
+[data-theme="light"] .hero::before {
+  background: linear-gradient(
+    rgba(244, 236, 214, 0.42),
+    rgba(244, 236, 214, 0.24)
+  );
 }
 
 .hero-content {
   max-width: 700px;
+  position: relative;
+  z-index: 1;
+  padding: 2rem 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: calc(var(--radius) * 1.6);
+  background: color-mix(in srgb, var(--color-bg) 36%, transparent);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
 }
 
 .hero h1 {
@@ -171,6 +209,7 @@ a:hover {
   margin-bottom: 1rem;
   line-height: 1.2;
   color: var(--color-heading);
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.28);
 }
 
 .highlight {
@@ -181,6 +220,7 @@ a:hover {
   font-size: 1.25rem;
   color: var(--color-text-muted);
   margin-bottom: 2rem;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* ============================================================
