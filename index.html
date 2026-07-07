@@ -19,6 +19,8 @@
         <li><a href="#contact">Contact</a></li>
       </ul>
       <!-- TODO: Ask Copilot to add a dark mode toggle button here -->
+        <button id="theme-toggle" aria-label="Toggle dark mode" class="btn">🌙</button>
+       
     </nav>
 
     <!-- ============================================================
@@ -45,11 +47,17 @@
                Try prompting Copilot: "Write a short professional bio for a CS student
                interested in [your interests]. Keep it warm and personal." -->
           <p>
-            I'm a computer science student at [Your University]. I'm interested in
-            [your interests here]. Outside of code, I enjoy [hobbies].
+            I'm Kameron, a computer science student at Florida A&M University
+            (Class of 2027) who likes to build things that help people grow,
+            whether that's software, gardens, or communities.
           </p>
           <p>
-            I'm currently [looking for internships / working on X / studying Y].
+            Right now, I'm contributing through the UCSC Open Source Contributor
+            Catalyst Program and exploring work at the intersection of AI,
+            full-stack development, and 3D visuals. When I'm away from the
+            keyboard, you can usually find me dancing, playing sousaphone,
+            tending my plants, homelabbing, or chasing down my next idea over a
+            cup of tea.
           </p>
         </div>
         <div class="about-image">
@@ -90,15 +98,15 @@
       <h2>Get In Touch</h2>
       <p class="contact-intro">
         <!-- TODO: Update this message -->
-        I'm currently open to new opportunities. Feel free to reach out!
+        I'm currently working on some exciting projects in open source and would love to connect! Feel free to reach out via email or connect with me on GitHub or LinkedIn.
       </p>
       <div class="contact-links">
         <!-- TODO: Add your real links -->
         <a href="mailto:you@email.com" class="btn">✉️ Email Me</a>
-        <a href="https://github.com/yourusername" class="btn btn-outline" target="_blank">
+        <a href="https://github.com/kameron-ctrl/kameron-ctrl" class="btn btn-outline" target="_blank">
           GitHub
         </a>
-        <a href="https://linkedin.com/in/yourprofile" class="btn btn-outline" target="_blank">
+        <a href="https://www.linkedin.com/in/kameronbenjamin/" class="btn btn-outline" target="_blank">
           LinkedIn
         </a>
       </div>
@@ -109,5 +117,31 @@
     </footer>
 
     <script src="script.js"></script>
+      <script>
+        (function() {
+          const btn = document.getElementById('theme-toggle');
+          const storageKey = 'theme';
+
+          function applyTheme(theme) {
+            if (theme === 'dark') document.body.classList.add('dark');
+            else document.body.classList.remove('dark');
+            btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+          }
+
+          const saved = localStorage.getItem(storageKey);
+          if (saved) applyTheme(saved);
+          else {
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            applyTheme(prefersDark ? 'dark' : 'light');
+          }
+
+          btn.addEventListener('click', () => {
+            const isDark = document.body.classList.toggle('dark');
+            const theme = isDark ? 'dark' : 'light';
+            localStorage.setItem(storageKey, theme);
+            btn.textContent = isDark ? '☀️' : '🌙';
+          });
+        })();
+      </script>
   </body>
 </html>
