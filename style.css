@@ -365,6 +365,29 @@ a:hover {
   margin: 0 auto;
 }
 
+.now-playing-section {
+  padding-top: 3.5rem;
+}
+
+.now-playing-card {
+  max-width: 420px;
+  padding: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: calc(var(--radius) * 1.2);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-surface) 92%, transparent),
+    color-mix(in srgb, var(--color-surface-alt) 88%, transparent)
+  );
+  box-shadow: var(--shadow-soft);
+}
+
+.now-playing-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 h2 {
   font-family: var(--font-display);
   font-size: 2rem;
@@ -432,44 +455,147 @@ h2::after {
 /* ============================================================
    PROJECTS
    ============================================================ */
+/* Only two projects — use a wider section so the cards feel roomier and
+   the screenshots can breathe without changing the overall layout. */
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 2rem;
+  width: 100%;
 }
 
+/* The card height follows its screenshot at natural aspect ratio, so
+   no part of the project is cut off. A hovercard panel slides up on
+   hover/focus. */
 .project-card {
-  background: var(--color-surface);
+  position: relative;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  padding: 1.5rem;
+  overflow: hidden;
+  background: var(--color-surface);
   box-shadow: var(--shadow);
   transition: transform var(--transition), box-shadow var(--transition);
+  cursor: pointer;
 }
 
-.project-card:hover {
+#projects.section-alt > * {
+  max-width: 1200px;
+}
+
+#projects .projects-grid {
+  max-width: 1200px;
+}
+
+.project-card:hover,
+.project-card:focus-visible {
   transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
+  outline: none;
 }
 
-.project-card h3 {
+.project-card:focus-visible {
+  border-color: var(--color-accent);
+}
+
+/* --- Resting state: the screenshot preview --- */
+/* Media sizes the card. The image shows in full (no crop); the card
+   height simply follows the image's natural aspect ratio. */
+.project-media {
+  position: relative;
+  display: block;
+}
+
+.project-media-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Fallback when no screenshot is provided — keep a pleasant ratio */
+.project-media-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-display);
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
+  font-size: 4rem;
+  color: var(--color-button-text);
+  background:
+    radial-gradient(circle at 30% 25%, color-mix(in srgb, var(--color-accent) 55%, transparent), transparent 60%),
+    linear-gradient(135deg, var(--color-surface-alt), var(--color-button-bg));
+}
+
+/* Scrim keeps the title readable over any screenshot */
+.project-media-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(38, 33, 28, 0.72) 0%, rgba(38, 33, 28, 0) 55%);
+}
+
+.project-title {
+  position: absolute;
+  left: 1.25rem;
+  right: 1.25rem;
+  bottom: 1rem;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--cream);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  margin: 0;
+}
+
+/* --- Hovercard: slides up over the screenshot --- */
+.project-preview {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: color-mix(in srgb, var(--color-surface) 94%, transparent);
+  backdrop-filter: blur(6px);
+  transform: translateY(101%);
+  opacity: 0;
+  transition: transform var(--transition), opacity var(--transition);
+  overflow-y: auto;
+}
+
+.project-card:hover .project-preview,
+.project-card:focus-within .project-preview {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.project-preview-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin: 0;
   color: var(--color-heading);
 }
 
-.project-card p {
+.project-preview-desc {
   color: var(--color-text-muted);
   font-size: 0.95rem;
-  margin-bottom: 1rem;
+  margin: 0;
+}
+
+.project-highlights {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .project-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
-  margin-bottom: 1rem;
+  margin-top: auto;
 }
 
 .tag {
@@ -490,6 +616,29 @@ h2::after {
 .project-links a {
   font-size: 0.875rem;
   font-weight: 600;
+}
+
+/* Touch devices can't hover — reveal the panel by default so the
+   information is never trapped behind an interaction they can't do. */
+@media (hover: none) {
+  .project-preview {
+    transform: none;
+    opacity: 1;
+    position: static;
+    backdrop-filter: none;
+  }
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  .project-card,
+  .project-preview {
+    transition: opacity var(--transition);
+  }
+
+  .project-preview {
+    transform: none;
+  }
 }
 
 /* ============================================================
@@ -614,10 +763,6 @@ footer {
 
   .projects-grid {
     grid-template-columns: 1fr;
-  }
-
-  .project-card {
-    padding: 1.25rem;
   }
 
   .contact-links {
