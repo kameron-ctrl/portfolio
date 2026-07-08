@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Vollkorn:ital,wght@0,400..900;1,400..900&display=swap');
+
 /* ============================================================
    CSS CUSTOM PROPERTIES — edit these to theme your site!
    TODO: Try asking Copilot to suggest a color palette for you.
@@ -34,7 +36,10 @@
   --color-surface: var(--bark-2);
   --color-surface-alt: var(--forest-green);
   --color-surface-hover: #453b32;
-  --font-main: 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Special Elite', monospace;
+  --font-body: 'Vollkorn', serif;
+  --font-mono: ui-monospace, SFMono-Regular, monospace;
+  --font-hero: var(--font-display);
   --radius: 10px;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
   --shadow-soft: 0 4px 14px rgba(0, 0, 0, 0.18);
@@ -81,7 +86,7 @@ html {
 }
 
 body {
-  font-family: var(--font-main);
+  font-family: var(--font-body);
   background-color: var(--color-bg);
   color: var(--color-text);
   line-height: 1.7;
@@ -123,6 +128,7 @@ a:hover {
 }
 
 .nav-logo {
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.2rem;
   color: var(--color-heading);
@@ -135,6 +141,7 @@ a:hover {
 }
 
 .nav-links a {
+  font-family: var(--font-body);
   color: var(--color-link);
   font-weight: 500;
 }
@@ -204,6 +211,7 @@ a:hover {
 }
 
 .hero h1 {
+  font-family: var(--font-hero);
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 800;
   margin-bottom: 1rem;
@@ -235,6 +243,90 @@ a:hover {
   font-weight: 600;
   transition: background var(--transition), transform var(--transition), color var(--transition), border-color var(--transition);
   box-shadow: var(--shadow-soft);
+}
+
+.theme-toggle-shell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 1rem;
+}
+
+.toggle,
+.toggle:before,
+.toggle:after {
+  transition: transform var(--dur, 0.3s);
+}
+
+.toggle {
+  --dur: 0.3s;
+  background: currentColor;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  width: 3rem;
+  height: 1.5rem;
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+  color: var(--color-border);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), var(--shadow-soft);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.toggle:before,
+.toggle:after {
+  border-radius: 50%;
+  content: "";
+  display: block;
+  top: 0.25rem;
+  left: 0.25rem;
+  width: 1rem;
+  height: 1rem;
+  position: absolute;
+}
+
+.toggle:before {
+  background: var(--color-bg);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-border) 55%, transparent);
+  transform: translateX(-1.5rem);
+}
+
+.toggle:after {
+  background: var(--color-accent);
+}
+
+.toggle:checked {
+  color: var(--color-heading);
+}
+
+.toggle:checked:before {
+  transform: translateX(1.5rem);
+}
+
+.toggle:checked:after {
+  transform: translateX(3rem);
+}
+
+.toggle:focus {
+  outline: transparent;
+}
+
+.toggle:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 35%, transparent), var(--shadow-soft);
+}
+
+.theme-toggle-shell .sr {
+  position: absolute;
+  clip: rect(1px, 1px, 1px, 1px);
+  color: transparent;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.theme-toggle-shell .sr,
+.toggle {
+  overflow: hidden;
 }
 
 .btn:hover {
@@ -274,6 +366,7 @@ a:hover {
 }
 
 h2 {
+  font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 2rem;
@@ -307,17 +400,33 @@ h2::after {
   margin-top: 1rem;
 }
 
-.avatar-placeholder {
+.about-image {
+  justify-self: center;
+}
+
+.about-photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.about-photo-image {
   width: 160px;
   height: 160px;
+  object-fit: cover;
+  object-position: center;
   border-radius: 50%;
   background: var(--color-surface-alt);
   border: 3px solid var(--color-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
   box-shadow: var(--shadow-soft);
+}
+
+.about-photo-caption {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--color-heading);
+  text-align: center;
 }
 
 /* ============================================================
@@ -344,6 +453,7 @@ h2::after {
 }
 
 .project-card h3 {
+  font-family: var(--font-display);
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
   color: var(--color-heading);
@@ -443,8 +553,80 @@ footer {
     grid-template-columns: 1fr;
   }
 
-  .avatar-placeholder {
+  .about-photo-image {
     width: 100px;
     height: 100px;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    padding: 0.9rem 1rem;
+    gap: 0.75rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .nav-links {
+    width: 100%;
+    order: 3;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    justify-content: center;
+    margin-top: 0.25rem;
+  }
+
+  .nav-links li {
+    flex: 0 0 auto;
+  }
+
+  .nav-logo {
+    font-size: 1rem;
+  }
+
+  .theme-toggle-shell {
+    margin-left: auto;
+  }
+
+  .hero {
+    min-height: 72vh;
+    padding: 3rem 1rem;
+  }
+
+  .hero-content {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.8rem, 8vw, 2.6rem);
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section,
+  .section-alt {
+    padding: 3.5rem 1rem;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-card {
+    padding: 1.25rem;
+  }
+
+  .contact-links {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .contact-links .btn {
+    width: 100%;
+    text-align: center;
   }
 }

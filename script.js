@@ -4,10 +4,22 @@
 // Each project needs: title, description, tags, and optional links.
 // Ask Copilot: "Add a project card for a [project type] called [name]"
 // ============================================================
+// Each project supports:
+//   title            — shown over the screenshot (required)
+//   description      — short line shown on the resting card
+//   longDescription  — fuller story revealed in the hovercard
+//   highlights       — optional bullet points shown in the hovercard
+//   image            — path to a screenshot or GIF (e.g. "previews/foo.png").
+//                      Leave as null to show a lettered gradient placeholder.
+//   tags, github, demo — as before
 const projects = [
   {
     title: "Project One",
     description: "A short description of what this project does and why you built it.",
+    longDescription:
+      "The fuller story: what problem it solved, what you built, and the outcome you're proud of.",
+    highlights: ["What you shipped", "A technical detail worth bragging about"],
+    image: null,
     tags: ["Python", "Flask"],
     github: "https://github.com/yourusername/project-one",
     demo: null,
@@ -15,6 +27,10 @@ const projects = [
   {
     title: "Project Two",
     description: "Another project you're proud of. What problem did it solve?",
+    longDescription:
+      "Describe the interesting part — an architecture decision, a hard bug you beat, or the impact it had.",
+    highlights: ["Real-time something", "React + a fun library"],
+    image: null,
     tags: ["JavaScript", "React"],
     github: "https://github.com/yourusername/project-two",
     demo: "https://yourproject.netlify.app",
@@ -22,6 +38,10 @@ const projects = [
   {
     title: "Project Three",
     description: "Keep it brief — one or two sentences is plenty.",
+    longDescription:
+      "A couple of sentences about the approach and what you learned building it.",
+    highlights: ["Algorithm or data-structure highlight"],
+    image: null,
     tags: ["Java", "Algorithms"],
     github: "https://github.com/yourusername/project-three",
     demo: null,
@@ -100,9 +120,9 @@ function getPreferredTheme() {
 function applyTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
 
-  const themeToggle = document.getElementById("theme-toggle");
+  const themeToggle = document.getElementById("dark-mode");
   if (themeToggle) {
-    themeToggle.textContent = theme === "dark" ? "☀️" : "🌙";
+    themeToggle.checked = theme === "dark";
     themeToggle.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
   }
 }
@@ -136,9 +156,9 @@ document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   updateYear();
 
-  const themeToggle = document.getElementById("theme-toggle");
+  const themeToggle = document.getElementById("dark-mode");
   if (themeToggle) {
-    themeToggle.addEventListener("click", toggleTheme);
+    themeToggle.addEventListener("change", toggleTheme);
   }
 
 });

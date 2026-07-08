@@ -33,9 +33,10 @@
         <li><a href="#skills">Skills</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
-      <!-- TODO: Ask Copilot to add a dark mode toggle button here -->
-        <button id="theme-toggle" aria-label="Toggle dark mode" class="btn">🌙</button>
-       
+      <div class="theme-toggle-shell">
+        <input id="dark-mode" class="toggle" type="checkbox" name="Dark mode" role="switch" aria-label="Toggle dark mode" />
+        <label for="dark-mode" class="sr">Dark Mode</label>
+      </div>
     </nav>
 
     <!-- ============================================================
@@ -77,8 +78,10 @@
           </p>
         </div>
         <div class="about-image">
-          <!-- TODO: Add your photo or a placeholder avatar -->
-          <div class="avatar-placeholder">📸</div>
+          <figure class="about-photo">
+            <img src="Kam%202.jpg" alt="Kam 2" class="about-photo-image" />
+            <figcaption class="about-photo-caption"></figcaption>
+          </figure>
         </div>
       </div>
     </section>
