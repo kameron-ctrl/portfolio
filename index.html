@@ -91,14 +91,27 @@
     ============================================================ -->
     <section class="section section-alt now-playing-section" id="now-playing">
       <h2>Recently Playing</h2>
-      <div class="now-playing-card">
-        <img
-          id="music-profile"
-          src="https://music-profile.rayriffy.com/theme/dark.svg?uid=000138.88831148bc504efebe1bed0b883cbd0b.2109"
-          alt="Recently played on Apple Music"
-          width="400"
-          loading="lazy"
-        />
+      <div class="now-playing-row">
+        <div class="now-playing-card">
+          <img
+            id="music-profile"
+            src="https://music-profile.rayriffy.com/theme/dark.svg?uid=000138.88831148bc504efebe1bed0b883cbd0b.2109"
+            alt="Recently played on Apple Music"
+            width="400"
+            loading="lazy"
+          />
+        </div>
+        <div class="linkedin-card">
+          <iframe
+            src="https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7478264299791126528?collapsed=1"
+            height="628"
+            width="504"
+            frameborder="0"
+            allowfullscreen=""
+            title="Embedded post"
+            loading="lazy"
+          ></iframe>
+        </div>
       </div>
     </section>
 
@@ -107,7 +120,7 @@
          Projects are rendered from the `projects` array in script.js.
          Add your real projects there — Copilot can help you fill in the data!
     ============================================================ -->
-    <section class="section section-alt" id="projects">
+    <section class="section" id="projects">
       <h2>Projects</h2>
       <div class="projects-grid" id="projects-container">
         <!-- Populated by script.js -->
@@ -117,7 +130,7 @@
     <!-- ============================================================
          SKILLS
     ============================================================ -->
-    <section class="section" id="skills">
+    <section class="section section-alt" id="skills">
       <h2>Skills</h2>
       <!-- TODO: Ask Copilot to generate a styled skills section using your actual
            tech stack. Try: "Add a skills section with badges for these technologies: ..." -->
@@ -129,7 +142,7 @@
     <!-- ============================================================
          CONTACT
     ============================================================ -->
-    <section class="section section-alt" id="contact">
+    <section class="section" id="contact">
       <h2>Get In Touch</h2>
       <p class="contact-intro">
         <!-- TODO: Update this message -->

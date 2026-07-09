@@ -57,7 +57,7 @@ For each entry, note:
 
 - **Copilot feature used:** inline chat
 - **Prompt:**
-  > Implement this dark mode toggle. It should switch a data-theme='dark' attribute on the body and save the preference to localStorage so it persists on reload.
+  > Implement this dark mode toggle. It should switch a data-theme='dark' attribute on the body and save the preference to localStorage so it persists on reload. (provided code to a toggle button i found online)
 - **Result:** Dark mode is implemented with a switch in the nav, theme persistence in localStorage, and a theme check on load.
 - **What I changed or did next:** I verified the toggle stayed in sync with the active theme and then used CSS custom properties to support both modes.
 
