@@ -46,15 +46,62 @@ const projects = [
 ];
 
 // ============================================================
-// SKILLS DATA
-// TODO: Replace with your actual skills.
-// Ask Copilot to help format this list based on your resume.
+// SKILLS DATA — a crate of records.
+// Each record is a category: the sleeve is the album cover,
+// the tracklist is the skills. `note` is optional liner-note
+// flavor (where the skill shows up in real work).
 // ============================================================
-const skills = [
-  "Python", "JavaScript", "Java", "C",
-  "HTML & CSS", "Git & GitHub",
-  "React", "Node.js",
-  "SQL", "Linux",
+const skillRecords = [
+  {
+    side: "SIDE A",
+    category: "Languages",
+    title: "Mother Tongues",
+    tracks: [
+      { name: "Python", note: "heavy rotation" },
+      { name: "JavaScript / TypeScript" },
+      { name: "Java" },
+      { name: "C++", note: "now teaching it" },
+      { name: "SQL" },
+      { name: "HTML & CSS" },
+    ],
+  },
+  {
+    side: "SIDE B",
+    category: "Frontend",
+    title: "Front of House",
+    tracks: [
+      { name: "React" },
+      { name: "Next.js", note: "CubeCoach" },
+      { name: "React Native / Expo", note: "Green Guardian" },
+      { name: "Three.js", note: "CubeCoach" },
+      { name: "Tailwind CSS" },
+    ],
+  },
+  {
+    side: "SIDE C",
+    category: "Backend & Cloud",
+    title: "Boiler Room",
+    tracks: [
+      { name: "Node.js" },
+      { name: "FastAPI" },
+      { name: "PostgreSQL" },
+      { name: "Docker" },
+      { name: "AWS", note: "Lambda · EC2 · CloudFront" },
+      { name: "GitHub Actions", note: "CI/CD" },
+    ],
+  },
+  {
+    side: "SIDE D",
+    category: "AI / ML",
+    title: "Thinking Machines",
+    tracks: [
+      { name: "PyTorch", note: "Green Guardian" },
+      { name: "Claude API", note: "CubeCoach" },
+      { name: "LLM Pipelines", note: "Outamation" },
+      { name: "Agentic AI" },
+      { name: "Prompt Engineering" },
+    ],
+  },
 ];
 
 // ============================================================
@@ -129,15 +176,133 @@ function renderProjects() {
 }
 
 // ============================================================
-// RENDER SKILLS
+// RENDER SKILLS — vinyl record crate carousel
 // ============================================================
 function renderSkills() {
   const container = document.getElementById("skills-container");
   if (!container) return;
 
-  container.innerHTML = skills
-    .map((skill) => `<span class="skill-badge">${skill}</span>`)
+  const records = skillRecords
+    .map((record, index) => {
+      const tracks = record.tracks
+        .map(
+          (track) => `
+          <li class="sleeve-track">
+            <span class="track-name">${escapeHtml(track.name)}</span>
+            ${track.note ? `<span class="track-note">${escapeHtml(track.note)}</span>` : ""}
+          </li>`
+        )
+        .join("");
+
+      return `
+      <figure class="record" data-index="${index}">
+        <div class="record-vinyl" aria-hidden="true">
+          <div class="vinyl-disc">
+            <span class="vinyl-label">${escapeHtml(record.category)}</span>
+          </div>
+        </div>
+        <div class="record-sleeve">
+          <div class="sleeve-art">
+            <span class="sleeve-side">${escapeHtml(record.side)}</span>
+            <span class="sleeve-cat">${escapeHtml(record.category)}</span>
+            <h3 class="sleeve-title">${escapeHtml(record.title)}</h3>
+            <span class="sleeve-artist">Kameron Benjamin</span>
+          </div>
+          <ol class="sleeve-tracks">${tracks}</ol>
+        </div>
+      </figure>`;
+    })
     .join("");
+
+  const dots = skillRecords
+    .map(
+      (record, index) => `
+      <button class="crate-dot" type="button" data-index="${index}"
+        aria-label="Show ${escapeHtml(record.category)} record"></button>`
+    )
+    .join("");
+
+  container.innerHTML = `
+    <div class="record-crate" role="region" aria-roledescription="carousel"
+         aria-label="Skills, presented as a crate of records">
+      <button class="crate-arrow crate-prev" type="button" aria-label="Previous record">&#10094;</button>
+      <div class="crate-stage" tabindex="0">${records}</div>
+      <button class="crate-arrow crate-next" type="button" aria-label="Next record">&#10095;</button>
+    </div>
+    <div class="crate-dots">${dots}</div>`;
+
+  initRecordCrate(container);
+}
+
+function initRecordCrate(container) {
+  const recordEls = Array.from(container.querySelectorAll(".record"));
+  const dotEls = Array.from(container.querySelectorAll(".crate-dot"));
+  const stage = container.querySelector(".crate-stage");
+  const total = recordEls.length;
+  let active = 0;
+
+  function update() {
+    recordEls.forEach((el, i) => {
+      // Wrap to the shortest signed distance so the crate feels circular.
+      let offset = i - active;
+      if (offset > total / 2) offset -= total;
+      if (offset < -total / 2) offset += total;
+
+      const clamped = Math.max(-2, Math.min(2, offset));
+      el.setAttribute("data-offset", String(clamped));
+      el.classList.toggle("is-active", offset === 0);
+      el.setAttribute("aria-hidden", offset === 0 ? "false" : "true");
+    });
+
+    dotEls.forEach((dot, i) => dot.classList.toggle("is-active", i === active));
+  }
+
+  function goTo(index) {
+    active = (index + total) % total;
+    update();
+  }
+
+  container.querySelector(".crate-prev").addEventListener("click", () => goTo(active - 1));
+  container.querySelector(".crate-next").addEventListener("click", () => goTo(active + 1));
+  dotEls.forEach((dot) =>
+    dot.addEventListener("click", () => goTo(Number(dot.dataset.index)))
+  );
+  recordEls.forEach((el, i) =>
+    el.addEventListener("click", () => {
+      if (i !== active) goTo(i);
+    })
+  );
+
+  stage.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      goTo(active - 1);
+    }
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      goTo(active + 1);
+    }
+  });
+
+  const SWIPE_THRESHOLD = 40;
+  let touchStartX = null;
+  stage.addEventListener(
+    "touchstart",
+    (event) => {
+      touchStartX = event.touches[0].clientX;
+    },
+    { passive: true }
+  );
+  stage.addEventListener("touchend", (event) => {
+    if (touchStartX === null) return;
+    const deltaX = event.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(deltaX) > SWIPE_THRESHOLD) {
+      goTo(deltaX < 0 ? active + 1 : active - 1);
+    }
+    touchStartX = null;
+  });
+
+  update();
 }
 
 // ============================================================

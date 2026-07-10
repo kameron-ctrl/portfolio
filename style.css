@@ -664,22 +664,284 @@ h2::after {
 }
 
 /* ============================================================
-   SKILLS
+   SKILLS — vinyl record crate carousel
    ============================================================ */
 .skills-container {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
 }
 
-.skill-badge {
-  padding: 0.5rem 1rem;
-  background: var(--color-surface-alt);
+.record-crate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.5rem, 3vw, 2rem);
+  width: 100%;
+}
+
+.crate-stage {
+  position: relative;
+  width: min(340px, 76vw);
+  /* sleeve art (square) + tracklist + headroom for the vinyl to rise */
+  height: calc(min(340px, 76vw) + 350px);
+  perspective: 1200px;
+  outline: none;
+}
+
+.crate-stage:focus-visible {
+  outline: 2px dashed var(--color-accent);
+  outline-offset: 12px;
+}
+
+.record {
+  position: absolute;
+  inset: 0;
+  padding-top: 110px;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease;
+}
+
+.record[data-offset="0"] {
+  transform: translateX(0) scale(1);
+  z-index: 3;
+  cursor: default;
+}
+
+.record[data-offset="-1"] {
+  transform: translateX(-56%) rotateY(30deg) scale(0.8);
+  opacity: 0.45;
+  z-index: 2;
+}
+
+.record[data-offset="1"] {
+  transform: translateX(56%) rotateY(-30deg) scale(0.8);
+  opacity: 0.45;
+  z-index: 2;
+}
+
+.record[data-offset="-2"] {
+  transform: translateX(-80%) scale(0.6);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.record[data-offset="2"] {
+  transform: translateX(80%) scale(0.6);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* --- The vinyl disc hiding inside the sleeve --- */
+.record-vinyl {
+  position: absolute;
+  top: 110px;
+  left: 50%;
+  width: 84%;
+  aspect-ratio: 1;
+  transform: translate(-50%, 6%);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 0;
+}
+
+.record.is-active .record-vinyl {
+  transform: translate(-50%, -28%);
+}
+
+.vinyl-disc {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.14), transparent 42%),
+    repeating-radial-gradient(circle at center, #17130f 0 2px, #232128 2px 4px);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45);
+}
+
+.record.is-active .vinyl-disc {
+  animation: vinyl-spin 16s linear infinite;
+}
+
+@keyframes vinyl-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.vinyl-label {
+  width: 38%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 0.4rem;
+  background: var(--amber);
+  color: var(--bark);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.25);
+}
+
+/* --- The sleeve (album cover + tracklist) --- */
+.record-sleeve {
+  position: relative;
+  z-index: 1;
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  font-size: 0.9rem;
-  font-weight: 500;
-  /* TODO: Ask Copilot to add an emoji or icon prefix to each badge */
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.sleeve-art {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.3rem;
+  padding: 1.4rem;
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--color-surface-alt) 85%, transparent), transparent 70%),
+    var(--color-surface);
+  border-bottom: 1px dashed var(--color-border);
+}
+
+.sleeve-side {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.28em;
+  color: var(--color-text-muted);
+}
+
+.sleeve-cat {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.sleeve-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 6vw, 2rem);
+  line-height: 1.1;
+  color: var(--color-heading);
+}
+
+.sleeve-artist {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
+.sleeve-tracks {
+  list-style: none;
+  counter-reset: track;
+  padding: 1rem 1.4rem 1.3rem;
+}
+
+.sleeve-track {
+  counter-increment: track;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.32rem 0;
+  border-bottom: 1px dotted color-mix(in srgb, var(--color-border) 55%, transparent);
+  font-size: 0.92rem;
+}
+
+.sleeve-track:last-child {
+  border-bottom: none;
+}
+
+.sleeve-track::before {
+  content: counter(track, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+.track-name {
+  font-weight: 600;
+}
+
+.track-note {
+  margin-left: auto;
+  font-size: 0.74rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+/* --- Controls --- */
+.crate-arrow {
+  position: relative;
+  z-index: 4;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-accent);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform var(--transition), background var(--transition), color var(--transition);
+}
+
+.crate-arrow:hover,
+.crate-arrow:focus-visible {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  transform: scale(1.08);
+}
+
+.crate-dots {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.crate-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid var(--color-accent);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.crate-dot.is-active {
+  background: var(--color-accent);
+  transform: scale(1.2);
+}
+
+@media (max-width: 640px) {
+  .record[data-offset="-1"],
+  .record[data-offset="1"] {
+    opacity: 0.18;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .record,
+  .record-vinyl {
+    transition: none;
+  }
+
+  .record.is-active .vinyl-disc {
+    animation: none;
+  }
 }
 
 /* ============================================================
