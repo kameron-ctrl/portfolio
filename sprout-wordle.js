@@ -13,7 +13,7 @@
     "TULIP", "MULCH", "SOLAR", "LUNAR", "COMET", "ORBIT", "STARS", "NIGHT",
     "SPACE", "PIXEL", "RETRO", "CLOUD", "ADMIN", "TUNER", "AUDIO", "BRASS",
     "STEPS", "DANCE", "CUBED", "SCRUB", "TIMER", "GREEN", "LEAFY", "SKATE",
-    "DEBUG", "PATCH", "CODED",
+    "DEBUG", "PATCH", "CODED", "TREES",
   ];
 
   const KEYBOARD_ROWS = [
