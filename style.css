@@ -375,11 +375,18 @@ a:hover {
   flex-wrap: wrap;
   gap: 2rem;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
 }
 
-.now-playing-card {
-  max-width: 420px;
+/* All three Now Playing embeds share one fixed-size box so they read as
+   a matched set on the same line, regardless of what each one renders
+   internally (an image, an iframe, or the Wordle widget). */
+.now-playing-card,
+.linkedin-card,
+.wordle-card {
+  width: 340px;
+  height: 560px;
+  box-sizing: border-box;
   padding: 1.25rem;
   border: 1px solid var(--color-border);
   border-radius: calc(var(--radius) * 1.2);
@@ -389,30 +396,183 @@ a:hover {
     color-mix(in srgb, var(--color-surface-alt) 88%, transparent)
   );
   box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .now-playing-card img {
   display: block;
-  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
   height: auto;
-}
-
-.linkedin-card {
-  padding: 1.25rem;
-  border: 1px solid var(--color-border);
-  border-radius: calc(var(--radius) * 1.2);
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--color-surface) 92%, transparent),
-    color-mix(in srgb, var(--color-surface-alt) 88%, transparent)
-  );
-  box-shadow: var(--shadow-soft);
+  object-fit: contain;
 }
 
 .linkedin-card iframe {
   display: block;
-  max-width: 100%;
+  width: 100%;
+  height: 100%;
   border: none;
+}
+
+/* ============================================================
+   SPROUT WORDLE
+   ============================================================ */
+.wordle-card {
+  justify-content: flex-start;
+  gap: 0.9rem;
+  overflow-y: auto;
+}
+
+.wordle-title {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.wordle-message {
+  min-height: 1.1rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.wordle-board {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.wordle-row {
+  display: grid;
+  grid-template-columns: repeat(5, 2.4rem);
+  gap: 0.4rem;
+}
+
+.wordle-tile {
+  width: 2.4rem;
+  height: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text);
+}
+
+.wordle-tile.correct {
+  background: var(--moss-green);
+  border-color: var(--moss-green);
+  color: var(--cream);
+}
+
+.wordle-tile.present {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: var(--bark);
+}
+
+.wordle-tile.absent {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.wordle-keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.wordle-krow {
+  display: flex;
+  gap: 0.3rem;
+  width: 100%;
+}
+
+.wordle-key {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 0.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color var(--transition), border-color var(--transition);
+}
+
+.wordle-key:hover,
+.wordle-key:focus-visible {
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+.wordle-key.correct {
+  background: var(--moss-green);
+  border-color: var(--moss-green);
+  color: var(--cream);
+}
+
+.wordle-key.present {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: var(--bark);
+}
+
+.wordle-key.absent {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.wordle-key.wide {
+  flex: 1.6;
+  font-size: 0.6rem;
+}
+
+.wordle-footer {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.wordle-footer[hidden] {
+  display: none;
+}
+
+.wordle-btn {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 4px;
+  color: var(--color-accent);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+.wordle-btn:hover,
+.wordle-btn:focus-visible {
+  background: var(--color-accent);
+  color: var(--color-bg);
 }
 
 h2 {
